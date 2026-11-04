@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Season Odds | TV renewability and quality</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="#top">season odds<span>TV data science project</span></a>
+    <nav aria-label="Main">
+      <a href="#top">Home</a>
+      <a href="#renewal">Renewal</a>
+      <a href="#quality">Quality</a>
+      <a href="#simulator">Simulator</a>
+      <a href="#method">Method</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1>Will your favorite show make it to season five?</h1>
+        <p class="lead">An analysis of TV renewals and ratings across hundreds of shows, using logistic regression, hypothesis tests, and Monte Carlo simulation.</p>
+        <a class="btn" href="#renewal">Explore the analysis</a>
+      </div>
+
+      <aside class="pitch" aria-labelledby="pitch-title">
+        <h2 id="pitch-title">Pitch a new show</h2>
+        <p class="note">Sample numbers for now. Connect your fitted model to replace them.</p>
+        <div class="fields">
+          <label>Network
+            <select id="f-network">
+              <option value="streaming">Streaming</option>
+              <option value="broadcast">Broadcast</option>
+              <option value="cable">Cable</option>
+            </select>
+          </label>
+          <label>Genre
+            <select id="f-genre">
+              <option value="drama">Drama</option>
+              <option value="comedy">Comedy</option>
+              <option value="scifi">Sci-fi</option>
+              <option value="reality">Reality</option>
+            </select>
+          </label>
+          <label>Premiere rating
+            <input id="f-rating" type="range" min="5" max="9.5" step="0.1" value="7.8">
+            <output id="o-rating">7.8</output>
+          </label>
+        </div>
+        <ul class="odds" id="odds" aria-live="polite"></ul>
+        <p class="foot">Based on 5,000 simulated show lifetimes.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 1. RENEWAL -->
+  <section class="section" id="renewal">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Which shows get renewed?</h2>
+        <p>We predict renewal from IMDb rating, vote count, network, genre, and season 1 episode count. The model returns a renewal probability for every show.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>—</b><span>Model AUC</span></div>
+        <div class="stat"><b>—</b><span>Chi-square p-value, network vs. renewal</span></div>
+        <div class="stat"><b>—</b><span>P(renewed | streaming)</span></div>
+        <div class="stat"><b>—</b><span>P(renewed | broadcast)</span></div>
+      </div>
+
+      <div class="figures three">
+        <figure><div class="ph">Bar plot<br><small>img/renewal_by_network.png</small></div><figcaption>Renewal rate by network and genre</figcaption></figure>
+        <figure><div class="ph">ROC curve<br><small>img/roc.png</small></div><figcaption>How well the model separates renewed from cancelled</figcaption></figure>
+        <figure><div class="ph">Calibration plot<br><small>img/calibration.png</small></div><figcaption>Do predicted probabilities match real outcomes?</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. QUALITY -->
+  <section class="section dark" id="quality">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Do shows get worse over time?</h2>
+        <p>Only shows with more than one season, and mostly those that kept getting renewed. We compare season 1 to the final season and measure how often ratings drop.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>—</b><span>Chance a rating drops between seasons</span></div>
+        <div class="stat"><b>—</b><span>Season 1 vs. final season, p-value</span></div>
+        <div class="stat"><b>—</b><span>Rating change per season (regression slope)</span></div>
+      </div>
+
+      <div class="figures two">
+        <figure><div class="ph">Line plot<br><small>img/rating_by_season.png</small></div><figcaption>Average rating by season</figcaption></figure>
+        <figure><div class="ph">Box plots<br><small>img/box_by_season.png</small></div><figcaption>Rating spread within each season</figcaption></figure>
+      </div>
+
+      <div class="heat">
+        <div class="heat-head">
+          <h3>Season-by-episode heatmap</h3>
+          <div class="tabs" role="tablist" aria-label="Episodes per season">
+            <button role="tab" aria-selected="true" data-eps="5">5 episodes</button>
+            <button role="tab" aria-selected="false" data-eps="8">8</button>
+            <button role="tab" aria-selected="false" data-eps="16">16</button>
+            <button role="tab" aria-selected="false" data-eps="32">32</button>
+          </div>
+        </div>
+        <figure><div class="ph wide" id="heat-ph">Heatmap for 5-episode seasons<br><small>img/heatmap_5.png</small></div>
+        <figcaption>Does the short-season format hold its quality better than the long one?</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SIMULATOR -->
+  <section class="section" id="simulator">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How long can a show last?</h2>
+        <p>Renewal odds change with every season. We use them to simulate thousands of show lifetimes, then read off the chance of reaching 5, 7, or 10 seasons.</p>
+      </div>
+
+      <div class="figures three">
+        <figure><div class="ph">Renewal odds by season<br><small>img/season_odds.png</small></div><figcaption>Chance of renewal after each season</figcaption></figure>
+        <figure><div class="ph">Lifespan histogram<br><small>img/lifespan.png</small></div><figcaption>How many seasons simulated shows lasted</figcaption></figure>
+        <figure><div class="ph">Scenario comparison<br><small>img/scenarios.png</small></div><figcaption>Network, genre, and premiere rating side by side</figcaption></figure>
+      </div>
+
+      <div class="question">
+        <h3>An open question: how far do the odds climb?</h3>
+        <p>Does the renewal probability keep rising season after season, or does it level off? Part of the answer is how many shows we have at season 8 and beyond. Few shows reach that far, so the estimates there are the least certain.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="section tint" id="method">
+    <div class="wrap method-grid">
+      <div class="section-head">
+        <h2>How it was built</h2>
+        <p>Python, from data cleaning to simulation.</p>
+      </div>
+      <dl class="tools">
+        <div><dt>pandas and numpy</dt><dd>Cleaning, grouping, and the simulation loop</dd></div>
+        <div><dt>matplotlib and seaborn</dt><dd>Every chart on this page</dd></div>
+        <div><dt>scipy and statsmodels</dt><dd>Chi-square test, t-tests, regression</dd></div>
+        <div><dt>scikit-learn</dt><dd>Logistic regression, ROC, calibration</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">Season Odds. A data science portfolio project on TV renewability and quality.</div>
+</footer>
+
+<script>
+  // Sample season-by-season renewal odds. Replace with values from your fitted model.
+  const BASE = [0.55, 0.68, 0.75, 0.80, 0.84, 0.87, 0.89, 0.90, 0.91, 0.92];
+  const NET = { streaming: 1.08, broadcast: 0.95, cable: 0.9 };
+  const GEN = { drama: 1.03, comedy: 0.98, scifi: 0.92, reality: 1.0 };
+
+  const $ = id => document.getElementById(id);
+  const ratingIn = $('f-rating');
+
+  function simulate(n = 5000) {
+    const boost = (parseFloat(ratingIn.value) - 7.5) * 0.04;
+    const k = NET[$('f-network').value] * GEN[$('f-genre').value];
+    const reach = new Array(BASE.length + 1).fill(0);
+    for (let i = 0; i < n; i++) {
+      let seasons = 1;
+      while (seasons <= BASE.length && Math.random() < Math.min(0.97, BASE[seasons - 1] * k + boost)) seasons++;
+      for (let s = 1; s <= Math.min(seasons, BASE.length); s++) reach[s]++;
+    }
+    return reach.map(c => c / n);
+  }
+
+  function render() {
+    $('o-rating').textContent = parseFloat(ratingIn.value).toFixed(1);
+    const reach = simulate();
+    $('odds').innerHTML = [3, 5, 7, 10].map(s => {
+      const p = Math.round(reach[s] * 100);
+      return `<li><span>Reaches season ${s}</span><i style="--w:${p}%"></i><b>${p}%</b></li>`;
+    }).join('');
+  }
+
+  ['f-network', 'f-genre', 'f-rating'].forEach(id => $(id).addEventListener('input', render));
+  render();
+
+  // Heatmap tabs
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', 'false'));
+      btn.setAttribute('aria-selected', 'true');
+      const e = btn.dataset.eps;
+      $('heat-ph').innerHTML = `Heatmap for ${e}-episode seasons<br><small>img/heatmap_${e}.png</small>`;
+    });
+  });
+</script>
+</body>
+</html>
