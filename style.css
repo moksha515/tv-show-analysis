@@ -29,8 +29,7 @@ p { margin: 0; }
 /* Header */
 .site-header { background: var(--bone); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); }
 .header-row { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding-block: 1rem; }
-.brand { font-family: var(--serif); font-size: 1.6rem; color: var(--ink); text-decoration: none; display: flex; flex-direction: column; line-height: 1; }
-.brand span { font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--stone); align-self: flex-end; margin-top: 0.3rem; }
+.brand { font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--ink); text-decoration: none; line-height: 1; }
 nav { display: flex; gap: 1.75rem; }
 nav a { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding-block: 0.3rem; border-bottom: 1px solid transparent; }
 nav a:hover { border-color: var(--sage-deep); }
