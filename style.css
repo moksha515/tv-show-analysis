@@ -72,7 +72,6 @@ input[type="range"] { accent-color: var(--sage); width: 100%; }
 /* Sections */
 .section { padding-block: clamp(3.5rem, 7vw, 5.5rem); }
 .section.dark { background: var(--charcoal); color: var(--bone); }
-.section.tint { background: var(--bone); }
 .section-head { max-width: 62ch; margin-bottom: 2.5rem; }
 .section-head h2 { font-size: clamp(1.9rem, 3.5vw, 2.7rem); margin-bottom: 0.9rem; }
 .section-head p { color: var(--stone); }
@@ -116,33 +115,18 @@ figcaption { font-size: 0.88rem; color: var(--stone); margin-top: 0.6rem; max-wi
 .tabs button:hover { border-color: var(--sage); }
 .tabs button[aria-selected="true"] { background: var(--sage); border-color: var(--sage); }
 
-/* Open question */
-.question { background: var(--bone); border-left: 4px solid var(--sage); padding: 1.75rem 2rem; margin-top: 2.5rem; max-width: 70ch; }
-.question h3 { font-size: 1.4rem; margin-bottom: 0.6rem; }
-.question p { color: var(--charcoal); }
-
-/* Method */
-.method-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: start; }
-.method-grid .section-head { margin-bottom: 0; }
-.tools { margin: 0; display: grid; }
-.tools div { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; padding-block: 1rem; border-top: 1px solid var(--line); }
-.tools div:last-child { border-bottom: 1px solid var(--line); }
-.tools dt { font-weight: 600; }
-.tools dd { margin: 0; color: var(--stone); }
-
 /* Footer */
-.site-footer { background: var(--charcoal); color: #b5bdb6; font-size: 0.85rem; padding-block: 1.75rem; }
+.site-footer { background: var(--charcoal); height: 5.5rem; }
 
 /* Responsive */
 @media (max-width: 900px) {
-  .hero-grid, .method-grid { grid-template-columns: 1fr; }
+  .hero-grid { grid-template-columns: 1fr; }
   .figures.three, .figures.two { grid-template-columns: 1fr; }
   .ph.wide { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 640px) {
   .header-row { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
   nav { gap: 1.1rem; flex-wrap: wrap; }
-  .tools div { grid-template-columns: 1fr; gap: 0.2rem; }
   .odds li { grid-template-columns: 7rem 1fr 2.8rem; }
 }
 @media (prefers-reduced-motion: reduce) {

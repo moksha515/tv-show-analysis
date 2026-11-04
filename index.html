@@ -19,7 +19,6 @@
       <a href="#renewal">Renewal</a>
       <a href="#quality">Quality</a>
       <a href="#simulator">Simulator</a>
-      <a href="#method">Method</a>
     </nav>
   </div>
 </header>
@@ -137,33 +136,13 @@
         <figure><div class="ph">Scenario comparison<br><small>img/scenarios.png</small></div><figcaption>Network, genre, and premiere rating side by side</figcaption></figure>
       </div>
 
-      <div class="question">
-        <h3>An open question: how far do the odds climb?</h3>
-        <p>Does the renewal probability keep rising season after season, or does it level off? Part of the answer is how many shows we have at season 8 and beyond. Few shows reach that far, so the estimates there are the least certain.</p>
-      </div>
     </div>
   </section>
 
-  <!-- METHOD -->
-  <section class="section tint" id="method">
-    <div class="wrap method-grid">
-      <div class="section-head">
-        <h2>How it was built</h2>
-        <p>Python, from data cleaning to simulation.</p>
-      </div>
-      <dl class="tools">
-        <div><dt>pandas and numpy</dt><dd>Cleaning, grouping, and the simulation loop</dd></div>
-        <div><dt>matplotlib and seaborn</dt><dd>Every chart on this page</dd></div>
-        <div><dt>scipy and statsmodels</dt><dd>Chi-square test, t-tests, regression</dd></div>
-        <div><dt>scikit-learn</dt><dd>Logistic regression, ROC, calibration</dd></div>
-      </dl>
-    </div>
-  </section>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap">Season Odds. A data science portfolio project on TV renewability and quality.</div>
-</footer>
+<footer class="site-footer" aria-hidden="true"></footer>
+
 
 <script>
   // Sample season-by-season renewal odds. Replace with values from your fitted model.
