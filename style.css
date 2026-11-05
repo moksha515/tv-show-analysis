@@ -54,11 +54,22 @@ nav a:hover { border-color: var(--sage-deep); }
 .note { font-size: 0.85rem; color: #aab3ac; margin: 0.4rem 0 1.5rem; }
 .fields { display: grid; gap: 1rem; }
 .fields label { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1rem; font-size: 0.85rem; color: #cfd5d0; }
-.fields select, .fields input[type="range"] { grid-column: 1 / -1; }
-.fields select {
+.fields[hidden] { display: none; }
+.fields select, .fields input[type="range"], .fields input[type="text"] { grid-column: 1 / -1; }
+.fields select, .fields input[type="text"] {
   width: 100%; font: inherit; color: var(--bone); background: var(--charcoal-soft);
   border: 1px solid rgba(244, 243, 240, 0.18); padding: 0.6rem 0.75rem; border-radius: 0;
 }
+.fields input[type="text"]::placeholder { color: #8f9892; }
+.show-info { grid-column: 1 / -1; font-size: 0.85rem; color: #aab3ac; min-height: 2.6em; }
+.modes { display: flex; margin-bottom: 1.5rem; }
+.modes button {
+  flex: 1; font: 600 0.8rem var(--sans); color: var(--bone); background: transparent; cursor: pointer;
+  border: 1px solid rgba(244, 243, 240, 0.3); padding: 0.55rem 0.9rem; border-radius: 0;
+}
+.modes button + button { border-left: 0; }
+.modes button:hover { border-color: var(--sage); }
+.modes button[aria-pressed="true"] { background: var(--sage); border-color: var(--sage); }
 .fields output { font-variant-numeric: tabular-nums; color: var(--bone); }
 input[type="range"] { accent-color: var(--sage); width: 100%; }
 

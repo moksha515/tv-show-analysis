@@ -37,7 +37,11 @@
       <aside class="pitch" aria-labelledby="pitch-title">
         <h2 id="pitch-title">Pitch a new show</h2>
         <p class="note">Sample numbers for now. Connect your fitted model to replace them.</p>
-        <div class="fields">
+        <div class="modes" role="group" aria-label="Simulate by">
+          <button type="button" data-mode="profile" aria-pressed="true">By profile</button>
+          <button type="button" data-mode="show" aria-pressed="false">By show</button>
+        </div>
+        <div class="fields" id="mode-profile">
           <label>Network
             <select id="f-network">
               <option value="streaming">Streaming</option>
@@ -57,6 +61,13 @@
             <input id="f-rating" type="range" min="5" max="9.5" step="0.1" value="7.8">
             <output id="o-rating">7.8</output>
           </label>
+        </div>
+        <div class="fields" id="mode-show" hidden>
+          <label for="f-show">TV show
+            <input id="f-show" type="text" list="show-list" placeholder="Type a show title" autocomplete="off">
+            <datalist id="show-list"></datalist>
+          </label>
+          <p class="show-info" id="show-info" aria-live="polite"></p>
         </div>
         <ul class="odds" id="odds" aria-live="polite"></ul>
         <p class="foot">Based on 5,000 simulated show lifetimes.</p>
@@ -153,15 +164,45 @@
   const NET = { streaming: 1.08, broadcast: 0.95, cable: 0.9 };
   const GEN = { drama: 1.03, comedy: 0.98, scifi: 0.92, reality: 1.0 };
 
-  const $ = id => document.getElementById(id);
-  const ratingIn = $('f-rating');
+  // Sample show lookup. Replace with rows from your dataset (or your model's API).
+  // seasons = seasons already aired, so the simulation starts from there.
+  const SHOWS = {
+    "Breaking Bad":     { network: "cable",     genre: "drama",   rating: 9.5, seasons: 5 },
+    "Game of Thrones":  { network: "cable",     genre: "drama",   rating: 9.2, seasons: 8 },
+    "The Office":       { network: "broadcast", genre: "comedy",  rating: 9.0, seasons: 9 },
+    "Friends":          { network: "broadcast", genre: "comedy",  rating: 8.9, seasons: 10 },
+    "Stranger Things":  { network: "streaming", genre: "scifi",   rating: 8.7, seasons: 4 },
+    "The Mandalorian":  { network: "streaming", genre: "scifi",   rating: 8.7, seasons: 3 },
+    "Survivor":         { network: "broadcast", genre: "reality", rating: 7.4, seasons: 47 },
+    "Love Is Blind":    { network: "streaming", genre: "reality", rating: 6.2, seasons: 7 },
+    "The Boys":         { network: "streaming", genre: "drama",   rating: 8.7, seasons: 4 },
+    "Parks and Recreation": { network: "broadcast", genre: "comedy", rating: 8.6, seasons: 7 }
+  };
+  const LABEL = { streaming: "Streaming", broadcast: "Broadcast", cable: "Cable", drama: "Drama", comedy: "Comedy", scifi: "Sci-fi", reality: "Reality" };
 
-  function simulate(n = 5000) {
-    const boost = (parseFloat(ratingIn.value) - 7.5) * 0.04;
-    const k = NET[$('f-network').value] * GEN[$('f-genre').value];
+  const $ = id => document.getElementById(id);
+  let mode = 'profile';
+
+  $('show-list').innerHTML = Object.keys(SHOWS).map(t => `<option value="${t}">`).join('');
+
+  function findShow(text) {
+    const t = text.trim().toLowerCase();
+    const key = Object.keys(SHOWS).find(k => k.toLowerCase() === t);
+    return key ? { title: key, ...SHOWS[key] } : null;
+  }
+
+  // Returns the inputs for the current mode, or null if there is nothing to simulate yet.
+  function getParams() {
+    if (mode === 'show') return findShow($('f-show').value);
+    return { network: $('f-network').value, genre: $('f-genre').value, rating: parseFloat($('f-rating').value), seasons: 1 };
+  }
+
+  function simulate(p, n = 5000) {
+    const boost = (p.rating - 7.5) * 0.04;
+    const k = NET[p.network] * GEN[p.genre];
     const reach = new Array(BASE.length + 1).fill(0);
     for (let i = 0; i < n; i++) {
-      let seasons = 1;
+      let seasons = p.seasons;
       while (seasons <= BASE.length && Math.random() < Math.min(0.97, BASE[seasons - 1] * k + boost)) seasons++;
       for (let s = 1; s <= Math.min(seasons, BASE.length); s++) reach[s]++;
     }
@@ -169,15 +210,36 @@
   }
 
   function render() {
-    $('o-rating').textContent = parseFloat(ratingIn.value).toFixed(1);
-    const reach = simulate();
+    $('o-rating').textContent = parseFloat($('f-rating').value).toFixed(1);
+    const p = getParams();
+
+    if (mode === 'show') {
+      const typed = $('f-show').value.trim();
+      $('show-info').textContent = p
+        ? `${LABEL[p.network]}, ${LABEL[p.genre]}, rating ${p.rating.toFixed(1)}, ${p.seasons} seasons aired. Seasons already aired show 100%.`
+        : typed ? 'This show is not in the sample list. Pick a suggestion, or switch to By profile.'
+                : 'Start typing a show title to see its odds.';
+    }
+
+    if (!p) { $('odds').innerHTML = ''; return; }
+    const reach = simulate(p);
     $('odds').innerHTML = [3, 5, 7, 10].map(s => {
-      const p = Math.round(reach[s] * 100);
-      return `<li><span>Reaches season ${s}</span><i style="--w:${p}%"></i><b>${p}%</b></li>`;
+      const pct = Math.round(reach[s] * 100);
+      return `<li><span>Reaches season ${s}</span><i style="--w:${pct}%"></i><b>${pct}%</b></li>`;
     }).join('');
   }
 
-  ['f-network', 'f-genre', 'f-rating'].forEach(id => $(id).addEventListener('input', render));
+  ['f-network', 'f-genre', 'f-rating', 'f-show'].forEach(id => $(id).addEventListener('input', render));
+
+  document.querySelectorAll('.modes button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      mode = btn.dataset.mode;
+      document.querySelectorAll('.modes button').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      $('mode-profile').hidden = mode !== 'profile';
+      $('mode-show').hidden = mode !== 'show';
+      render();
+    });
+  });
   render();
 
   // Heatmap tabs
