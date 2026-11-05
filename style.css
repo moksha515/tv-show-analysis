@@ -103,6 +103,7 @@ input[type="range"] { accent-color: var(--sage); width: 100%; }
 .figures.three { grid-template-columns: repeat(3, 1fr); }
 .figures.two { grid-template-columns: repeat(2, 1fr); }
 figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
 figcaption { font-size: 0.88rem; color: var(--stone); margin-top: 0.6rem; max-width: 40ch; }
 .dark figcaption { color: #b5bdb6; }
 .ph {
@@ -114,22 +115,6 @@ figcaption { font-size: 0.88rem; color: var(--stone); margin-top: 0.6rem; max-wi
 .ph.wide { aspect-ratio: 16 / 6; }
 .dark .ph { background: var(--charcoal-soft); border-color: rgba(244, 243, 240, 0.3); color: var(--bone); }
 .dark .ph small { color: #aab3ac; }
-
-/* Renewal blocks */
-.block { padding-block: 2.25rem; border-top: 1px solid var(--line); }
-.block-title { font-size: 1.6rem; margin-bottom: 1.25rem; max-width: 32ch; }
-.block-intro { color: var(--charcoal); max-width: 62ch; margin-bottom: 1.5rem; }
-.viz { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: start; margin-bottom: 1.5rem; }
-.explain { margin: 0; display: grid; gap: 1.25rem; }
-.explain.cols { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.5rem; margin-top: 0.5rem; }
-.explain dt { font-weight: 600; font-size: 0.9rem; color: var(--sage-deep); margin-bottom: 0.25rem; }
-.explain dd { margin: 0; color: var(--charcoal); }
-.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.25rem; }
-.steps li { counter-increment: step; background: var(--bone); padding: 1.25rem; }
-.steps li::before { content: counter(step); display: block; font: 500 1.8rem/1 var(--serif); color: var(--sage-deep); margin-bottom: 0.6rem; }
-.steps h4 { font: 600 1rem var(--sans); margin: 0 0 0.35rem; }
-.steps p { font-size: 0.92rem; color: var(--stone); }
-.takeaway { margin-top: 1.5rem; background: var(--bone); border-left: 4px solid var(--sage); padding: 1rem 1.25rem; max-width: 70ch; }
 
 /* Heatmap tabs */
 .heat { margin-top: 2.5rem; }
@@ -149,7 +134,7 @@ figcaption { font-size: 0.88rem; color: var(--stone); margin-top: 0.6rem; max-wi
 /* Responsive */
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; }
-  .figures.three, .figures.two, .viz { grid-template-columns: 1fr; }
+  .figures.three, .figures.two { grid-template-columns: 1fr; }
   .ph.wide { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 640px) {

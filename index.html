@@ -77,14 +77,16 @@
   </section>
 
   <!-- 1. RENEWAL -->
+  <!-- Charts below are made by renewal_model.py (run it to refresh the images in img/). -->
   <section class="section" id="renewal">
     <div class="wrap">
       <div class="section-head">
         <h2>Which shows get renewed?</h2>
-        <p>We predict renewal from IMDb rating, vote count, network, genre, and season 1 episode count. The model returns a renewal probability for every show. Each chart below comes with a short note on what is happening in it.</p>
+        <p>We predict renewal from IMDb rating, vote count, network, genre, and season 1 episode count. The model returns a renewal probability for every show.</p>
       </div>
 
-      <!-- HIDDEN FOR NOW: renewal stat tiles (AUC, chi-square, P(renewed)). Remove this comment wrapper to show them again. -->
+      <!-- HIDDEN FOR NOW: renewal stat tiles (AUC, chi-square, P(renewed)). Remove this comment wrapper to show them again.
+           The numbers for them are saved in results/metrics.json by renewal_model.py. -->
       <!--
       <div class="stats">
         <div class="stat"><b>—</b><span>Model AUC</span></div>
@@ -94,74 +96,46 @@
       </div>
       -->
 
-      <!-- Block 1: bar plots (two visualizations) -->
-      <div class="block">
-        <h3 class="block-title">Bar plots: renewal rate by genre and by network</h3>
-        <div class="figures two">
-          <figure><div class="ph">Bar plot, by genre<br><small>img/renewal_by_genre.png</small></div><figcaption>Renewal rate by genre</figcaption></figure>
-          <figure><div class="ph">Bar plot, by network<br><small>img/renewal_by_network.png</small></div><figcaption>Renewal rate by network</figcaption></figure>
-        </div>
-        <dl class="explain cols">
-          <div><dt>What is happening</dt><dd>Each bar is the share of shows in that group that got renewed. One chart groups shows by genre and the other by network.</dd></div>
-          <div><dt>Why it matters</dt><dd>It shows what the renewal rate looks like across networks and genres, and the patterns between a genre and a network. Those patterns feed into the overall renewal probability.</dd></div>
-          <div><dt>How we check it</dt><dd>A chi-square test compares groups, for example P(renewed | Netflix) against P(renewed | CBS), to see whether the gap is real or just chance.</dd></div>
-        </dl>
+      <div class="figures two">
+
+        <!-- BAR PLOT 1 of 2: renewal rate by genre.
+             Helps to visualize what the renewal rate looks like across different genres.
+             Shows the patterns between a genre and a network, which helps in the overall renewability probability calculation. -->
+        <figure>
+          <img src="img/renewal_by_genre.png" alt="Bar chart of renewal rate by genre" width="960" height="720">
+          <figcaption>Renewal rate by genre</figcaption>
+        </figure>
+
+        <!-- BAR PLOT 2 of 2: renewal rate by network.
+             Helps to visualize what the renewal rate looks like across different networks.
+             A chi-square test checks whether differences such as P(renewed | Netflix) vs P(renewed | CBS) are significant. -->
+        <figure>
+          <img src="img/renewal_by_network.png" alt="Bar chart of renewal rate by network" width="960" height="720">
+          <figcaption>Renewal rate by network</figcaption>
+        </figure>
+
+        <!-- ROC CURVE: after building the logistic regression model, shows how well the model can tell renewed
+             shows from cancelled ones (the accuracy of its predictions). Closer to the top-left corner is better. -->
+        <figure>
+          <img src="img/roc.png" alt="ROC curve showing how well the model separates renewed from cancelled shows" width="960" height="720">
+          <figcaption>How well the model separates renewed from cancelled</figcaption>
+        </figure>
+
+        <!-- CALIBRATION PLOT: checks if the predicted chances are believable by comparing the model percentage
+             to the actual percentage. Shows are grouped into buckets (0-10%, 10-20%, ... 90-100%), then the real
+             renewal rate is calculated for each bucket (how many were actually renewed, S1 to S2). Points on the
+             diagonal mean the percentages can be trusted. -->
+        <figure>
+          <img src="img/calibration.png" alt="Calibration plot comparing predicted renewal probability to the actual share renewed" width="960" height="720">
+          <figcaption>Do predicted probabilities match real outcomes?</figcaption>
+        </figure>
       </div>
 
-      <!-- Block 2: the logistic regression model (how the probability is made) -->
-      <div class="block">
-        <h3 class="block-title">The logistic regression model: how the probability is made</h3>
-        <p class="block-intro">The model learns from past shows what predicts renewal, then gives a renewal probability for each show.</p>
-        <ol class="steps">
-          <li>
-            <h4>History</h4>
-            <p>The model is given past data: rating, votes, network, genre, season 1 episode count, and whether the show was renewed or cancelled.</p>
-          </li>
-          <li>
-            <h4>Weights</h4>
-            <p>It starts with a 50% guess, checks how wrong the guesses are, and adds up all the mistakes (the loss). Then it nudges the weights to lower the loss and repeats until improvement slows down. Every show gets a renewal percentage, even the cancelled ones, so a high percentage on a cancelled show counts as a mistake.</p>
-          </li>
-          <li>
-            <h4>Score a show</h4>
-            <p>Each clue is multiplied by its weight, and the results are added up. A high score points to renewal and a low score points to cancellation. For example, if high-rated shows were renewed more than predicted, the weight on rating goes up.</p>
-          </li>
-          <li>
-            <h4>Score to percentage</h4>
-            <p>The score is passed through the logistic function, which squeezes it into a percentage between 0% and 100%.</p>
-          </li>
-        </ol>
-        <p class="takeaway">The simulator and the "Pitch a new show" card use this percentage as the renewal chance each season, and repeat the process thousands of times to estimate how long a show will last.</p>
-      </div>
-
-      <!-- Block 3: ROC curve -->
-      <div class="block">
-        <h3 class="block-title">ROC curve: can the model tell renewed from cancelled?</h3>
-        <div class="viz">
-          <figure><div class="ph">ROC curve<br><small>img/roc.png</small></div><figcaption>How well the model separates renewed from cancelled</figcaption></figure>
-          <dl class="explain">
-            <div><dt>What is happening</dt><dd>After the logistic regression model is built, this curve shows how well it can tell renewed shows apart from cancelled ones.</dd></div>
-            <div><dt>Why it matters</dt><dd>It is a measure of the model's accuracy in its predictions. The closer the curve gets to the top-left corner, the better the model. A diagonal line would mean it is no better than guessing.</dd></div>
-          </dl>
-        </div>
-      </div>
-
-      <!-- Block 4: calibration plot -->
-      <div class="block">
-        <h3 class="block-title">Calibration plot: can we believe the percentages?</h3>
-        <div class="viz">
-          <figure><div class="ph">Calibration plot<br><small>img/calibration.png</small></div><figcaption>Do predicted probabilities match real outcomes?</figcaption></figure>
-          <dl class="explain">
-            <div><dt>What is happening</dt><dd>This checks whether the predicted chances are believable by comparing the model's percentage to the actual percentage of shows that were renewed.</dd></div>
-            <div><dt>Why it matters</dt><dd>If shows given about 70% really are renewed about 70% of the time, the points sit on the diagonal and the probabilities can be trusted in the simulator.</dd></div>
-          </dl>
-        </div>
-        <ol class="steps">
-          <li><h4>Get each prediction</h4><p>The model gives every show a predicted renewal percentage.</p></li>
-          <li><h4>Group into buckets</h4><p>Shows with similar predictions are grouped together, such as 0 to 10%, 10 to 20%, up to 90 to 100%.</p></li>
-          <li><h4>Calculate the real rate</h4><p>For each bucket, count how many of its shows were actually renewed (season 1 to season 2).</p></li>
-          <li><h4>Plot it</h4><p>Predicted percentage goes on one axis and the real renewal rate on the other.</p></li>
-        </ol>
-      </div>
+      <!-- LOGISTIC REGRESSION MODEL (no chart of its own): learns from past shows what predicts renewal and gives a
+           probability for each show. History (rating, votes, network, genre, S1 episodes, renewed or cancelled) ->
+           Weights (start at 50%, check how wrong, add up the mistakes = loss, nudge weights, repeat) -> Score a show
+           (sum of clue x weight) -> Score to percentage (logistic function). The Simulator and "Pitch a new show"
+           card use this percentage as the renewal chance each season. See build_and_train() in renewal_model.py. -->
     </div>
   </section>
 
