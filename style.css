@@ -61,7 +61,8 @@ nav a:hover { border-color: var(--sage-deep); }
   border: 1px solid rgba(244, 243, 240, 0.18); padding: 0.6rem 0.75rem; border-radius: 0;
 }
 .fields input[type="text"]::placeholder { color: #8f9892; }
-.show-info { grid-column: 1 / -1; font-size: 0.85rem; color: #aab3ac; min-height: 2.6em; }
+.show-info { grid-column: 1 / -1; font-size: 0.85rem; color: #aab3ac; }
+.show-info.hint { margin-top: -0.4rem; }
 .modes { display: flex; margin-bottom: 1.5rem; }
 .modes button {
   flex: 1; font: 600 0.8rem var(--sans); color: var(--bone); background: transparent; cursor: pointer;

@@ -17,8 +17,8 @@
     <nav aria-label="Main">
       <a href="#top">Home</a>
       <a href="#renewal">Renewal</a>
-      <a href="#quality">Quality</a>
       <a href="#simulator">Simulator</a>
+      <a href="#quality">Quality</a>
     </nav>
   </div>
 </header>
@@ -68,6 +68,7 @@
             <datalist id="show-list"></datalist>
           </label>
           <p class="show-info" id="show-info" aria-live="polite"></p>
+          <p class="show-info hint">Erase the show name to check another show.</p>
         </div>
         <ul class="odds" id="odds" aria-live="polite"></ul>
         <p class="foot">Based on 5,000 simulated show lifetimes.</p>
@@ -101,7 +102,24 @@
     </div>
   </section>
 
-  <!-- 2. QUALITY -->
+  <!-- 2. SIMULATOR -->
+  <section class="section" id="simulator">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How long can a show last?</h2>
+        <p>Renewal odds change with every season. We use them to simulate thousands of show lifetimes, then read off the chance of reaching 5, 7, or 10 seasons.</p>
+      </div>
+
+      <div class="figures three">
+        <figure><div class="ph">Renewal odds by season<br><small>img/season_odds.png</small></div><figcaption>Chance of renewal after each season</figcaption></figure>
+        <figure><div class="ph">Lifespan histogram<br><small>img/lifespan.png</small></div><figcaption>How many seasons simulated shows lasted</figcaption></figure>
+        <figure><div class="ph">Scenario comparison<br><small>img/scenarios.png</small></div><figcaption>Network, genre, and premiere rating side by side</figcaption></figure>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. QUALITY -->
   <section class="section dark" id="quality">
     <div class="wrap">
       <div class="section-head">
@@ -133,23 +151,6 @@
         <figure><div class="ph wide" id="heat-ph">Heatmap for 5-episode seasons<br><small>img/heatmap_5.png</small></div>
         <figcaption>Does the short-season format hold its quality better than the long one?</figcaption></figure>
       </div>
-    </div>
-  </section>
-
-  <!-- 3. SIMULATOR -->
-  <section class="section" id="simulator">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>How long can a show last?</h2>
-        <p>Renewal odds change with every season. We use them to simulate thousands of show lifetimes, then read off the chance of reaching 5, 7, or 10 seasons.</p>
-      </div>
-
-      <div class="figures three">
-        <figure><div class="ph">Renewal odds by season<br><small>img/season_odds.png</small></div><figcaption>Chance of renewal after each season</figcaption></figure>
-        <figure><div class="ph">Lifespan histogram<br><small>img/lifespan.png</small></div><figcaption>How many seasons simulated shows lasted</figcaption></figure>
-        <figure><div class="ph">Scenario comparison<br><small>img/scenarios.png</small></div><figcaption>Network, genre, and premiere rating side by side</figcaption></figure>
-      </div>
-
     </div>
   </section>
 
