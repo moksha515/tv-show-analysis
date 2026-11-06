@@ -1,0 +1,23 @@
+{
+  "data_source": "TMDB_tv_dataset_v3.csv",
+  "label_mode": "broad",
+  "model_auc": 0.766,
+  "model_auc_without_votes": 0.713,
+  "chi_square_p_value_network": 6.519986442172573e-75,
+  "p_renewed_by_network": {
+    "ABC": 0.745,
+    "AT-X": 0.253,
+    "BBC One": 0.877,
+    "CBS": 0.84,
+    "FOX": 0.736,
+    "Fuji TV": 0.299,
+    "HBO": 0.838,
+    "Las Estrellas": 0.144,
+    "NBC": 0.725,
+    "Netflix": 0.622,
+    "Other": 0.681,
+    "TV Tokyo": 0.383,
+    "Tokyo MX": 0.328
+  },
+  "test_shows": 924
+}
